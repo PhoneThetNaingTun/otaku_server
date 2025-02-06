@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String @db.VarChar(50)
+  email         String          @unique
+  password      String
+  gender        Gender?
+  refreshToken  String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  Rating_Review Rating_Review[]
+  Favourite     Favourite[]
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id             String           @id @default(cuid())
+  category_name  String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Manga_Category Manga_Category[]
+}
+
+model Season {
+  id           String         @id @default(cuid())
+  season       String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Manga_Season Manga_Season[]
+}
+
+model Author {
+  id          String   @id @default(cuid())
+  author_name String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Manga       Manga[]
+}
+
+model Manga {
+  id                String           @id @default(cuid())
+  manga_name        String
+  manga_image       String
+  manga_description String
+  authorId          String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  author            Author           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  Manga_Season      Manga_Season[]
+  Favourite         Favourite[]
+  Manga_Category    Manga_Category[]
+  Rating_Review     Rating_Review[]
+}
+
+model Manga_Category {
+  id         String   @id @default(cuid())
+  mangaId    String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  manga      Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model Manga_Season {
+  id                   String                 @id @default(cuid())
+  mangaId              String
+  seasonId             String
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  manga                Manga                  @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  season               Season                 @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  Manga_Season_Chapter Manga_Season_Chapter[]
+}
+
+model Manga_Season_Chapter {
+  id            String       @id @default(cuid())
+  mangaSeasonId String
+  chapterId     String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  mangaSeason   Manga_Season @relation(fields: [mangaSeasonId], references: [id], onDelete: Cascade)
+  chapter       Chapter      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  Page          Page[]
+}
+
+model Chapter {
+  id                   String                 @id @default(cuid())
+  chapter              String
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  Manga_Season_Chapter Manga_Season_Chapter[]
+}
+
+model Page {
+  id                   String               @id @default(cuid())
+  imgUrl               String
+  mangaSeasonChapterId String
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  mangaSeasonChapter   Manga_Season_Chapter @relation(fields: [mangaSeasonChapterId], references: [id], onDelete: Cascade)
+}
+
+model Rating_Review {
+  id        String   @id @default(cuid())
+  userId    String
+  mangaId   String
+  rating    Float
+  review    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga     Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+}
+
+model Favourite {
+  id        String   @id @default(cuid())
+  userId    String
+  mangaId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga     Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+}
