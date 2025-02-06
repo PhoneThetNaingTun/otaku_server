@@ -41,6 +41,7 @@ export const adminLogin = async (
         secure: process.env.NODE_ENV === "production",
         sameSite: "none",
         maxAge: 60 * 60 * 24 * 30 * 1000,
+        domain: ".vercel.app",
       })
       .status(200)
       .json({
