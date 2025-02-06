@@ -3,6 +3,8 @@ import { validateEmail } from "../util/valitateEmail";
 import { prisma } from "../util/prisma";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const adminLogin = async (
   req: express.Request,
