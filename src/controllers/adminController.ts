@@ -39,7 +39,11 @@ export const adminLogin = async (
       .cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        domain: "localhost",
+        domain:
+          process.env.NODE_ENV === "production"
+            ? ".otaku-admin-one.vercel.app"
+            : "localhost",
+        sameSite: "lax",
       })
       .status(200)
       .json({
