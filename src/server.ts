@@ -28,6 +28,7 @@ import UserFavouriteRoute from "./routes/UserFavouriteRoute";
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
@@ -75,6 +76,6 @@ app.use("/api/rating-review", UserRatingAndReviewRoutes);
 //favourite
 app.use("/api/favourite", verifyUserToken, UserFavouriteRoute);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
