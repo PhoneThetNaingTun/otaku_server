@@ -41,6 +41,7 @@ export const adminLogin = async (
         secure: process.env.NODE_ENV === "production",
         sameSite: "none",
         expires: new Date(Date.now() + 3600000),
+        maxAge: 3600000,
       })
       .status(200)
       .json({
