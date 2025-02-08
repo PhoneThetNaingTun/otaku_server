@@ -41,9 +41,8 @@ export const adminLogin = async (
       .cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        maxAge: 60 * 60 * 24 * 30 * 1000,
-        domain: ".vercel.app",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        domain: "localhost",
       })
       .status(200)
       .json({
