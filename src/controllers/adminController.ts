@@ -42,7 +42,6 @@ export const adminLogin = async (
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        domain: "localhost",
       })
       .status(200)
       .json({
