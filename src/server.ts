@@ -24,6 +24,7 @@ import UserPageRoutes from "./routes/UserPageRoute";
 import UserRatingAndReviewRoutes from "./routes/UserRatingAndReviewRoute";
 import AdminUserRoute from "./routes/AdminUserRoute";
 import UserFavouriteRoute from "./routes/UserFavouriteRoute";
+import NotificationRoute from "./routes/NotificationRoute";
 
 dotenv.config();
 
@@ -75,6 +76,9 @@ app.use("/api/pages", UserPageRoutes);
 app.use("/api/rating-review", UserRatingAndReviewRoutes);
 //favourite
 app.use("/api/favourite", verifyUserToken, UserFavouriteRoute);
+
+// notificaiton
+app.use("/api/notification", NotificationRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -150,3 +150,9 @@ model Favourite {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   manga     Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
 }
+
+model PushToken {
+  id        String @id @default(cuid())  
+  token     String @unique               
+  createdAt DateTime @default(now())      
+}
